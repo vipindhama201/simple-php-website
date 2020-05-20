@@ -1,0 +1,23 @@
+---
+# playbook to deploy the website on the remote production server
+# Maintainer: Raveendiran RR
+#references: https://docs.ansible.com/ansible/latest/modules/docker_container_module.html#requirements
+
+# 1. remove the existing container
+# 2. deply the container with the latest image
+
+- hosts: ProdServer
+  become_user: root
+  tasks:
+  - name: remove container
+    docker_container:
+        name: website-prod
+        state: absent
+          
+  - name: Running the container
+    docker_container:
+        name: website-prod
+        image: smartbond/simple-php-website:latest
+        state: running
+        ports:
+          -"80:80"
